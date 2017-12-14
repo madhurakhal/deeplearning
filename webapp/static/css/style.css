@@ -14,3 +14,10 @@
 .main {
   margin-top: 350px;
 }
+.result-img {
+  cursor: pointer;
+}
+
+img.active {
+  border: 1px solid green;
+}

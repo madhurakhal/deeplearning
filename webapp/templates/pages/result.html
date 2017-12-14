@@ -6,30 +6,54 @@
         <div class="row">
           <div class="col-lg-12 text-center">
             <h2 class="section-heading text-uppercase">Results for</h2>
-            <h3 class="section-subheading text-muted"> {{query}}</h3>
+            <h3 class="section-subheading text-muted" id='search_text'> {{query}}</h3>
           </div>
         </div>
         <div class="row">
-          <form action="/feedback">
+          <form action="/feedback" id='feedback-form' method='post'>
+            {% for image in images %}
+              <div class="col-md-4 col-sm-6 portfolio-item">
+                <img class="img-fluid result-img" src="/{{image}}" alt="{{image}}">
+              </div>
+            {% endfor %}
+            <input type="hidden" name='feedback' id='feedback'>
+            <button id='submit-btn' class='btn btn-success'>Give Feedback</button>
           </form>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/02-thumbnail.jpg" alt="">
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/03-thumbnail.jpg" alt="">
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/04-thumbnail.jpg" alt="">
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/05-thumbnail.jpg" alt="">
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="img/portfolio/06-thumbnail.jpg" alt="">
-          </div>
       </div>
     </section>
+    <script>
+      window.addEventListener('load', function(evt) {
+          evt.preventDefault();
+        var selectedImages = [];
+        var button = document.getElementById('submit-btn');
+
+        document.addEventListener('click', function(evt) {
+          var classList = evt.target.classList;
+          if(classList.contains('result-img')) {
+            classList.toggle('active');
+            var img = evt.target.alt;
+            if(classList.contains('active')) {
+              if (selectedImages.indexOf(img) == -1) {
+                selectedImages.push(img)
+              }
+            } else {
+              var index = selectedImages.indexOf(img);
+              selectedImages.splice(index,1)
+            }
+          }
+        });
+
+        button.addEventListener('click', function(evt) {
+          evt.preventDefault()
+          var query = '{{query}}';
+          var obj = {
+            images: selectedImages,
+            query
+          };
+
+          document.getElementById('feedback').value = JSON.stringify(obj)
+          document.getElementById('feedback-form').submit();
+        });
+      });
+    </script>
 {% endblock %}
