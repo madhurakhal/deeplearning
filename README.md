@@ -14,5 +14,5 @@ Website for our research project
 
 ## Starting webserver
 1. `cd webapp`
-2. 'python app.py'
+2. `python app.py`
 
